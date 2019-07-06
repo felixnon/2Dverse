@@ -82,24 +82,29 @@ var addShade = function(x, y, rgb){
 
 	// sun lights half of the planet -> offset shade a quarter of the plantets circumference to left an right
 	var shadeOffsetFromCenter = Math.floor(planet[y].length / 4 );
-	
 	// the pixel where the center of the light is 
-	var lightCenter = Math.floor(SUNPOS * planet[y].length / 4);
+	var lightCenterX = Math.floor(SUNPOS[0] * planet[y].length / 4);
 	
-	// calculathe the distance between x and the center of light;
-	
+	// calculate the distance between x and the center of light;
 	// make sure p1 <= p2
-	p1 = Math.min(x, lightCenter);
-	p2 = Math.max(x, lightCenter);
+	p1 = Math.min(x, lightCenterX);
+	p2 = Math.max(x, lightCenterX);
+	// direct distance between the 2 points
 	dist1 = p2 - p1;
+	// distance when overflowing the end of the array
 	dist2 = p1 + planet[y].length - p2
+	// actual distance in x direction
+	distToCenterX = Math.min(dist1, dist2);
 	
-	distToCenter = Math.min(dist1, dist2);
+	lightCenterY = Math.floor(SUNPOS[1] * SIZE + SIZE);
+	distToCenterY = Math.abs(y - lightCenterY);
 	
-	if(distToCenter > Math.abs(shadeOffsetFromCenter)){
-		rgb = changeLuminance(rgb, -distToCenter/(planet[y].length/2) * 100);
+	totalDist = Math.round(Math.sqrt(Math.pow(distToCenterX,2), Math.pow(distToCenterY,2)));
+	
+	if(totalDist > Math.abs(shadeOffsetFromCenter)){
+		rgb = changeLuminance(rgb, -totalDist/(planet[y].length/2) * 130);
 	}else{
-		rgb = changeLuminance(rgb, 0.5 - (distToCenter/(planet[y].length/2)) * 50);
+		rgb = changeLuminance(rgb, 0.5 - (totalDist/(planet[y].length/2)) * 50);
 	}
 	
 	return rgb;
@@ -119,10 +124,10 @@ var drawVoxel = function(x, y, rgb){
 };
 
 var moveSun = function(){
-	SUNPOS = SUNPOS + 0.005;
+SUNPOS[0] = SUNPOS[0] + 0.005;
 	
-	if (SUNPOS > 2){
-		SUNPOS = -2;
+	if (SUNPOS[0] > 2){
+		SUNPOS[0] = -2;
 	}
 };
 

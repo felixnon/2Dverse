@@ -2,8 +2,9 @@
 var SIZE = 60;
 
 // Defines the direction of the light.
-// -1 (left)  +1 (right) -2/2 (from behind) 0 (front)
-var SUNPOS = -2;
+// X-value: -1 (left)  +1 (right) -2/2 (from behind) 0 (front)
+// Y-value: 0 center, 1 top, -1 bottom
+var SUNPOS = [-2,0];
 
 // get the canvas element and its context
 var canvas = document.getElementById("myCanvas");
@@ -96,7 +97,7 @@ var generateNextWedge = function(){
 }
 
 
-for (i = 0; i < 10000; i ++){
+for (i = 0; i < 100; i ++){
 	
 	rotation = rotation + rotationRate;
   
